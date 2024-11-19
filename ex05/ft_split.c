@@ -6,7 +6,7 @@
 /*   By: ibrunial <ibrunial@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 16:50:57 by ibrunial          #+#    #+#             */
-/*   Updated: 2024/11/20 00:03:48 by ibrunial         ###   ########.fr       */
+/*   Updated: 2024/11/20 00:09:53 by ibrunial         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,9 @@ char	**ft_split(char *str, char *charset)
 	int		sub_str;
 
 	init_vars(&dest, &i, &last, &sub_str);
-	while (!str && !charset && is_in_string(charset, str[i]) && str[i++] != '\0')
+	while (str && charset && is_in_string(charset, str[i]) && str[i++] != '\0')
 		last++;
-	while (!str && !charset && str[i] != '\0')
+	while (str && charset && str[i] != '\0')
 	{
 		if (is_in_string(charset, str[i]))
 		{
@@ -102,7 +102,7 @@ char	**ft_split(char *str, char *charset)
 		else
 			i++;
 	}
-	if (!str && !charset && i > last)
+	if (str && charset && i > last)
 		dest = cp_arr(dest, ++sub_str, cp_substr(&str[last], i - last));
 	return (dest);
 }
