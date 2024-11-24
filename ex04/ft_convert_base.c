@@ -6,14 +6,15 @@
 /*   By: ibrunial <ibrunial@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/18 15:40:46 by ibrunial          #+#    #+#             */
-/*   Updated: 2024/11/20 00:05:11 by ibrunial         ###   ########.fr       */
+/*   Updated: 2024/11/24 18:27:43 by ibrunial         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
 
-int		ft_putnbr_base(int nbr, char *base, char *dest);
-int		ft_strlen(char *str);
+void	ft_putnbr_base(int nbr, char *base, char *dest);
+int		validate_base(char *nbr, char *base_from, char *base_to);
+int		count_digits(long long int n, int x);
 
 int	is_in_str(char *str, char c)
 {
@@ -80,55 +81,55 @@ int	ft_atoi_base(char *str, char *base)
 
 	i = 0;
 	while (base[i] != '\0')
-	{
-		if (base[i] == '+' || base[i] == '-')
-			return (0);
-		if (base[i] <= 32 || base[i] == 127)
-			return (0);
 		i++;
-	}
-	if (has_duplicates(base))
-		return (0);
-	if (i <= 1)
-		return (0);
 	return (ft_atoi(str, base, i));
 }
 
 char	*ft_convert_base(char *nbr, char *base_from, char *base_to)
 {
 	char	*dest;
-	int		i;
 	int		num;
+	int		size_dest;
+	int		i;
 
-	dest = (char *)malloc(sizeof(char) * 34);
-	if (!nbr || !base_from || !base_to || !dest)
+	if (!nbr || !base_from || !base_to)
 		return (NULL);
-	i = 0;
+	if (validate_base(nbr, base_from, base_to))
+		return (NULL);
 	num = ft_atoi_base(nbr, base_from);
-	if (*nbr != '\0' && num == 0)
-	{
-		if (!(*nbr == *base_to && *(nbr + 1) == '\0'))
-			return (free(dest), NULL);
-	}
-	while (i < 34)
-		dest[i++] = '\0';
-	if (ft_putnbr_base(num, base_to, dest))
-		return (free(dest), NULL);
+	i = 0;
+	while (base_to[i] != '\0')
+		i++;
+	size_dest = count_digits((long long int)num, i);
+	dest = (char *)malloc(sizeof(char) * size_dest + 1);
+	if (!dest)
+		return (NULL);
+	ft_putnbr_base(num, base_to, dest);
+	dest[size_dest] = '\0';
 	return (dest);
 }
 
-// int main() {
-// 	char *nbr = "0123";
-// 	char *base_from = "0123456";
-// 	char *base_to = "0123456789";
-// 	char *result = ft_convert_base(nbr, base_from, base_to);
-// 	// Output atteso: "97" (se "p=0, o=1, n=2, y=3, v=4, i=5, f=6")
+// #include <stdio.h>
+// int	main(void)
+// {
+// 	char	*nbr;
+// 	char	*base_from;
+// 	char	*base_to;
+// 	char	*result;
 
-//     if (result) {
-//         printf("Risultato: %s\n", result); // Output: Risultato: 5
-//         free(result);
-//     } else {
-//         printf("Errore nelle basi fornite.\n");
-//     }
-//     return (0);
+// 	nbr = "-1111111111111111111111111111111";
+// 	base_from = "01";
+// 	base_to = "0123456789";
+// 	result = ft_convert_base(nbr, base_from, base_to);
+// 	// Output atteso: "97" (se "p=0, o=1, n=2, y=3, v=4, i=5, f=6")
+// 	if (result)
+// 	{
+// 		printf("Risultato: %s\n", result); // Output: Risultato: 5
+// 		free(result);
+// 	}
+// 	else
+// 	{
+// 		printf("Errore nelle basi fornite.\n");
+// 	}
+// 	return (0);
 // }
